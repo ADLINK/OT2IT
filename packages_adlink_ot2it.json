@@ -448,7 +448,7 @@
                     "architecture": "samd",
                     "version": "1.2.9",
                     "category": "Adlink",
-                    "url": "https://github.com/veeraadlink/OT2IT/raw/main/adlink-ot2it-1.0.0.zip",
+                    "url": "https://github.com/ADLINK/OT2IT/raw/main/adlink-ot2it-1.0.0.zip",
                     "archiveFileName": "adlink-ot2it-1.0.0.zip",
                     "checksum": "SHA-256:3056f0d397b34999064f9de33dc2445f4498769b8cdd1aa1567c2cc5e9e54c4a",
                     "size": "3492651",
