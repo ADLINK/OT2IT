@@ -1,0 +1,40 @@
+uf2-samdx1 bootloader build instructions
+========================================
+
+Host PC Environment
+-------------------
+
+  - $ UBUNTU 22.04 LTS 
+  
+cross-compiler setup
+--------------------
+
+  - Download the arm-none-eabi-gcc from https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2 into ~/Downloads
+  - $ cd /opt/
+  - $ sudo tar jxvf ~/Downloads/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+  - $ export PATH=/opt/gcc-arm-none-eabi-10.3-2021.10/bin/:$PATH
+
+Download the uf2-samdx1 bootloader
+----------------------------------
+
+  - $ cd ~
+  - $ git clone https://github.com/microsoft/uf2-samdx1
+  - $ cd ~/uf2-samdx1
+  
+Download & Apply the patches
+-----------------------------
+
+  - $ cd ~
+  - $ git clone https://github.com/ADLINK/OT2IT
+  - $ cd ~/uf2-samdx1
+  - $ patch -p1 < ~/OT2IT/uf2_patches/001-ot2it-board-support.patch 
+  - $ patch -p1 < ~/OT2IT/uf2_patches/002-clock-config-ethernet.patch
+  - $ patch -p1 < ../OT2IT/uf2_patches/003-USB-detect-issue-fixed.patch
+  
+Build the uf2-samdx1
+--------------------
+
+  - $ export PATH=/opt/gcc-arm-none-eabi-10.3-2021.10/bin/:$PATH
+  - $ cd ~/uf2-samdx1
+  - $ make BOARD=ot2it
+  - $ after successful build, bootloader of ot2it will present at build/ot2it/bootloader-ot2it-<git revision>.bin (for ex: build/ot2it/bootloader-ot2it-v3.4.0-83-g4c90034-dirty.bin)
