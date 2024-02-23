@@ -2,6 +2,7 @@
 
 
 bool link_up = false;
+bool dhcp_up = false;
 uint8_t speed;
 char buffer[1024];
 
@@ -55,7 +56,7 @@ void mac_receive_cb(struct mac_async_descriptor *desc)
 
 void link_status_print(void)
 {
-  Serial.print(" Eth: ");
+  Serial.print("Eth: ");
   if (link_up)
   {
     Serial.print("UP. ");
@@ -111,6 +112,7 @@ void OT2ITEth::begin(uint8_t *hwaddr)
 void OT2ITEth::get_link_sts()
 {
   int ret;
+  static int lup;
   do
   {
     ret = ethernet_phy_get_link_status(&ETHERNET_PHY_0_desc, &link_up, &speed);
@@ -121,7 +123,17 @@ void OT2ITEth::get_link_sts()
     delay(200);
   } while (true);
 
-  Serial.println("Ethernet link up");
+  if(lup != link_up) {
+    if(link_up) {
+      Serial.println("Ethernet link up");
+      link_status_print();
+    }
+    lup = link_up;
+  }
+
+  //if (!(link_up && TCPIP_STACK_INTERFACE_0_desc.ip_addr.addr)) {
+    receive();
+  //}
 }
 
 void OT2ITEth::ip_stack_init(uint8_t *hwaddr)
@@ -137,9 +149,9 @@ void OT2ITEth::ip_stack_init(uint8_t *hwaddr)
   netif_set_up(&TCPIP_STACK_INTERFACE_0_desc); // enable this for Static IP
 #endif
 
-  ot2it_print_ipaddress();
+  //ot2it_print_ipaddress();
   /*Handles web server events*/
-  lwip_raw_api_init();
+  //lwip_raw_api_init();
 }
 
 void OT2ITEth::receive()
@@ -155,8 +167,11 @@ void OT2ITEth::receive()
   /* Print IP address info */
   if (link_up && TCPIP_STACK_INTERFACE_0_desc.ip_addr.addr)
   {
-    link_up = false;
-    ot2it_print_ipaddress();
+    //link_up = false;
+    if(dhcp_up == false) {
+      ot2it_print_ipaddress();
+      dhcp_up = true;
+    }
   }
 }
 
@@ -178,4 +193,9 @@ void OT2ITEth::setGatewayIp(IPAddress ipAddr)
 void OT2ITEth::setSubnetMask(IPAddress ipAddr)
 {
   TCPIP_STACK_INTERFACE_0_desc.netmask.addr = ipAddr;
+}
+
+int OT2ITEth::maintain(void)
+{
+  return (link_up && dhcp_up);
 }

@@ -54,5 +54,6 @@ public:
    void setIPAddress(IPAddress ipAddr);
    void setGatewayIp(IPAddress ipAddr);
    void setSubnetMask(IPAddress ipAddr);
+   int maintain(void);
 };
 #endif
