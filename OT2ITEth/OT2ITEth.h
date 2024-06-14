@@ -55,5 +55,7 @@ public:
    void setGatewayIp(IPAddress ipAddr);
    void setSubnetMask(IPAddress ipAddr);
    int maintain(void);
+   int32_t force_10mbps();
+   int32_t force_100mbps();
 };
 #endif

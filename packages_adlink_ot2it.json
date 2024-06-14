@@ -450,8 +450,8 @@
                     "category": "Adlink",
                     "url": "https://github.com/ADLINK/OT2IT/raw/main/adlink-ot2it-1.0.0.zip",
                     "archiveFileName": "adlink-ot2it-1.0.0.zip",
-                    "checksum": "SHA-256:e42ddb839491829b1caa808aa2dd4706b35ebe89822926f5b611f6c0c00b92ba",
-                    "size": "5493279",
+                    "checksum": "SHA-256:32a88daa58ae16e06232ce5422d2520576e62843246a6bba73192f27b2e978de",
+                    "size": "5500412",
                     "help": {
                         "online": "https://www.ipi.wiki/"
                     },

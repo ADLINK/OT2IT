@@ -109,6 +109,30 @@ void OT2ITEth::begin(uint8_t *hwaddr)
   ip_stack_init(hwaddr);
 }
 
+int32_t OT2ITEth::force_10mbps()
+{
+  int32_t ret;
+  ret = ethernet_phy_force_10mbps(&ETHERNET_PHY_0_desc);
+  if(ret != ERR_NONE) {
+    Serial.println("Ethernet: Force 10 MBPS Failed");
+  }else{
+    Serial.println("Ethernet: Force 10 MBPS Done");
+  }
+  return ret;
+}
+
+int32_t OT2ITEth::force_100mbps()
+{
+  int32_t ret;
+  ret = ethernet_phy_force_100mbps(&ETHERNET_PHY_0_desc);
+  if(ret != ERR_NONE) {
+    Serial.println("Ethernet: Force 100 MBPS Failed");
+  }else{
+    Serial.println("Ethernet: Force 100 MBPS Done");
+  }
+  return ret;
+}
+
 void OT2ITEth::get_link_sts()
 {
   int ret;
@@ -172,6 +196,8 @@ void OT2ITEth::receive()
       ot2it_print_ipaddress();
       dhcp_up = true;
     }
+  }else{
+    dhcp_up = false;
   }
 }
 
