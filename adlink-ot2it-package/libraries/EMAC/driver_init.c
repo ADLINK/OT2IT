@@ -85,6 +85,16 @@ void COMMUNICATION_IO_example(void)
 	mac_async_write(&COMMUNICATION_IO, (uint8_t *)"Hello World!", 12);
 }
 
+void led_10_100_on(void)
+{
+	gpio_set_pin_level(LED_0, false);
+}
+
+void led_10_100_off(void)
+{
+	gpio_set_pin_level(LED_0, true);
+}
+
 void system_init(void)
 {
 	//init_mcu();

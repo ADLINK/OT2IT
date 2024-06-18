@@ -64,15 +64,19 @@ void link_status_print(void)
     {
     case 1:
       Serial.println("10Mbps Half Dx");
+      led_10_100_off();
       break;
     case 2:
       Serial.println("10Mbps Full Dx");
+      led_10_100_off();
       break;
     case 3:
       Serial.println("100Mbps Half Dx");
+      led_10_100_on();
       break;
     case 4:
       Serial.println("100Mbps Full Dx");
+      led_10_100_on();
       break;
     default:
       break;
@@ -112,24 +116,30 @@ void OT2ITEth::begin(uint8_t *hwaddr)
 int32_t OT2ITEth::force_10mbps()
 {
   int32_t ret;
+  //mac_async_deinit(&COMMUNICATION_IO);
+  //ot2it_speed = 0;
   ret = ethernet_phy_force_10mbps(&ETHERNET_PHY_0_desc);
   if(ret != ERR_NONE) {
     Serial.println("Ethernet: Force 10 MBPS Failed");
   }else{
     Serial.println("Ethernet: Force 10 MBPS Done");
   }
+  //mac_async_init(&COMMUNICATION_IO, GMAC);
   return ret;
 }
 
 int32_t OT2ITEth::force_100mbps()
 {
   int32_t ret;
+  //mac_async_deinit(&COMMUNICATION_IO);
+  //ot2it_speed = 1;  
   ret = ethernet_phy_force_100mbps(&ETHERNET_PHY_0_desc);
   if(ret != ERR_NONE) {
     Serial.println("Ethernet: Force 100 MBPS Failed");
   }else{
     Serial.println("Ethernet: Force 100 MBPS Done");
   }
+  //mac_async_init(&COMMUNICATION_IO, GMAC);  
   return ret;
 }
 

@@ -38,6 +38,9 @@ extern "C" {
 u32_t sys_now(void);
 void systick_enable(void);
 void SysTick_Handler(void);
+extern int ot2it_speed;
+void led_10_100_on(void);
+void led_10_100_off(void);
 #ifdef __cplusplus
 }
 #endif
