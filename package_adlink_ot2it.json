@@ -410,7 +410,7 @@
                         {
                             "packager": "arduino",
                             "name": "arm-none-eabi-gcc",
-                            "version": "4.8.3-2014q1"
+                            "version": "9-2019q4"
                         },
                         {
                             "packager": "arduino",
@@ -425,12 +425,12 @@
                         {
                             "packager": "arduino",
                             "name": "CMSIS",
-                            "version": "4.5.0"
+                            "version": "5.7.0"
                         },
                         {
-                            "packager": "arduino",
+                            "packager": "adlink",
                             "name": "CMSIS-Atmel",
-                            "version": "1.2.0"
+                            "version": "1.2.2"
                         }
                     ]
                 }
