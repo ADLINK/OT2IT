@@ -279,8 +279,8 @@
                     "category": "adlink",
                     "url": "https://github.com/ADLINK/ArduinoCore-samd/archive/refs/tags/v1.7.16.zip",
                     "archiveFileName": "ArduinoCore-samd-1.7.16.zip",
-                    "checksum": "SHA-256:794a4449e6e19cfe4ec3fafd3175aff04ba837c69353fc80a77eb7e48ace3fba",
-                    "size": "1213648",
+                    "checksum": "SHA-256:af942bbf88cef115e705869d80c1531dfdd109af0ab09824dde159346fa7348c",
+                    "size": "1207860",
                     "help": {
                         "online": "https://www.ipi.wiki/"
                     },
