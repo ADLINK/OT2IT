@@ -1,10 +1,10 @@
 #include "OT2ITEth.h"
-
+#include "Arduino.h"
 
 bool link_up = false;
 bool dhcp_up = false;
 uint8_t speed;
-char buffer[1024];
+//char buffer[1024];
 
 /* This is the data for the socket web page. */
 const static char socket_webpage[] = "<html> \
@@ -33,20 +33,20 @@ void ot2it_print_ipaddress(void)
   Serial.println(ipaddr_ntoa_r((const ip_addr_t *)&(TCPIP_STACK_INTERFACE_0_desc.gw), tmp_buff, 16));
 }
 
-u32_t sys_now(void)
-{
-  return systick_timems;
-}
+//u32_t sys_now(void)
+//{
+//  return systick_timems;
+//}
 
-void SysTick_Handler(void)
-{
-  systick_timems++;
-}
+//void SysTick_Handler(void)
+//{
+//  systick_timems++;
+//}
 
 void systick_enable(void)
 {
-  systick_timems = 0;
-  SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
+//  systick_timems = 0;
+  SysTick_Config((CONF_CPU_FREQUENCY) / 1000); // 1ms
 }
 
 void mac_receive_cb(struct mac_async_descriptor *desc)
@@ -64,19 +64,15 @@ void link_status_print(void)
     {
     case 1:
       Serial.println("10Mbps Half Dx");
-      led_10_100_off();
       break;
     case 2:
       Serial.println("10Mbps Full Dx");
-      led_10_100_off();
       break;
     case 3:
       Serial.println("100Mbps Half Dx");
-      led_10_100_on();
       break;
     case 4:
       Serial.println("100Mbps Full Dx");
-      led_10_100_on();
       break;
     default:
       break;
@@ -113,61 +109,53 @@ void OT2ITEth::begin(uint8_t *hwaddr)
   ip_stack_init(hwaddr);
 }
 
-int32_t OT2ITEth::force_10mbps()
-{
-  int32_t ret;
-  //mac_async_deinit(&COMMUNICATION_IO);
-  //ot2it_speed = 0;
-  ret = ethernet_phy_force_10mbps(&ETHERNET_PHY_0_desc);
-  if(ret != ERR_NONE) {
-    Serial.println("Ethernet: Force 10 MBPS Failed");
-  }else{
-    Serial.println("Ethernet: Force 10 MBPS Done");
-  }
-  //mac_async_init(&COMMUNICATION_IO, GMAC);
-  return ret;
-}
+// void OT2ITEth::get_link_sts()
+// {
+//   int ret;
+//   static int lup;
+//   do
+//   {
+//     ret = ethernet_phy_get_link_status(&ETHERNET_PHY_0_desc, &link_up, &speed);
+//     if (link_up)
+//     {
+//       break;
+//     }
+//     delay(200);
+//   } while (true);
 
-int32_t OT2ITEth::force_100mbps()
-{
-  int32_t ret;
-  //mac_async_deinit(&COMMUNICATION_IO);
-  //ot2it_speed = 1;  
-  ret = ethernet_phy_force_100mbps(&ETHERNET_PHY_0_desc);
-  if(ret != ERR_NONE) {
-    Serial.println("Ethernet: Force 100 MBPS Failed");
-  }else{
-    Serial.println("Ethernet: Force 100 MBPS Done");
-  }
-  //mac_async_init(&COMMUNICATION_IO, GMAC);  
-  return ret;
-}
+//   if(lup != link_up) {
+//     if(link_up) {
+//       Serial.println("Ethernet link up");
+//       link_status_print();
+//     }
+//     lup = link_up;
+//   }
+
+//   //if (!(link_up && TCPIP_STACK_INTERFACE_0_desc.ip_addr.addr)) {
+//     receive();
+//   //}
+// }
 
 void OT2ITEth::get_link_sts()
 {
   int ret;
   static int lup;
-  do
+
+  ret = ethernet_phy_get_link_status(&ETHERNET_PHY_0_desc, &link_up, &speed);
+
+  if (lup != link_up)
   {
-    ret = ethernet_phy_get_link_status(&ETHERNET_PHY_0_desc, &link_up, &speed);
     if (link_up)
     {
-      break;
-    }
-    delay(200);
-  } while (true);
-
-  if(lup != link_up) {
-    if(link_up) {
       Serial.println("Ethernet link up");
       link_status_print();
     }
+    else
+      dhcp_up = false;
     lup = link_up;
   }
-
-  //if (!(link_up && TCPIP_STACK_INTERFACE_0_desc.ip_addr.addr)) {
-    receive();
-  //}
+  else
+    return;
 }
 
 void OT2ITEth::ip_stack_init(uint8_t *hwaddr)
@@ -206,8 +194,6 @@ void OT2ITEth::receive()
       ot2it_print_ipaddress();
       dhcp_up = true;
     }
-  }else{
-    dhcp_up = false;
   }
 }
 
