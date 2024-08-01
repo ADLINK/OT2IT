@@ -20,6 +20,7 @@
 #include <sam.h>
 #include <variant.h>
 #include <stdio.h>
+#include <stdint.h>
 
 /* RTOS Hooks */
 extern void svcHook(void);
@@ -35,7 +36,7 @@ void Dummy_Handler(void)
   for (;;) { }
 }
 
-#if defined(__SAME54__)
+#if defined(__SAMD51__)
 
 /* Cortex-M4 processor handlers */
 void Reset_Handler               ( void );
@@ -196,6 +197,7 @@ extern uint32_t __bss_end__;
 extern uint32_t __StackTop;
 
 /* Exception Table */
+__attribute__ ((used))
 __attribute__ ((section(".isr_vector"))) const DeviceVectors exception_table =
 {
 	/* Configure Initial Stack Pointer, using linker-generated symbols */
@@ -407,6 +409,7 @@ extern uint32_t __bss_end__;
 extern uint32_t __StackTop;
 
 /* Exception Table */
+__attribute__ ((used))
 __attribute__ ((section(".isr_vector"))) const DeviceVectors exception_table =
 {
   /* Configure Initial Stack Pointer, using linker-generated symbols */
@@ -501,9 +504,16 @@ void Reset_Handler(void)
 
 /* Default Arduino systick handler */
 extern void SysTick_DefaultHandler(void);
+volatile uint32_t systick_timems;
 
-void Ot2it_SysTick_Handler(void)
+uint32_t sys_now(void)
 {
+  return systick_timems;
+}
+
+void SysTick_Handler(void)
+{
+  systick_timems++;
   if (sysTickHook())
     return;
   SysTick_DefaultHandler();
@@ -511,7 +521,7 @@ void Ot2it_SysTick_Handler(void)
 
 static void (*usb_isr)(void) = NULL;
 
-#if defined(__SAME54__)
+#if defined(__SAMD51__)
 void USB_0_Handler(void)
 {
 	if (usb_isr)
